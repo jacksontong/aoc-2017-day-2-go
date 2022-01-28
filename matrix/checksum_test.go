@@ -14,15 +14,15 @@ func TestCalculateChecksum(t *testing.T) {
 		want int
 	}{
 		{
-			`5 1 9 5
-			7 5 3 
-			2 4 6 8`,
+			`5 9 2 8
+			9 4 7 3
+			3 8 6 5`,
 			args{matrix: [][]int{
-				{5, 1, 9, 5},
-				{7, 5, 3},
-				{2, 4, 6, 8},
+				{5, 9, 2, 8},
+				{9, 4, 7, 3},
+				{3, 8, 6, 5},
 			}},
-			18,
+			9,
 		},
 	}
 	for _, tt := range tests {
@@ -34,37 +34,43 @@ func TestCalculateChecksum(t *testing.T) {
 	}
 }
 
-func Test_findMinAndMax(t *testing.T) {
+func Test_findDividable(t *testing.T) {
 	type args struct {
 		in []int
 	}
 	tests := []struct {
-		name    string
-		args    args
-		wantMin int
-		wantMax int
+		name  string
+		args  args
+		want  int
+		want1 int
 	}{
 		{
-			"5 1 9 5",
-			args{[]int{5, 1, 9, 5}},
-			1,
+			"5 9 2 8",
+			args{[]int{5, 9, 2, 8}},
+			2,
+			8,
+		},
+		{
+			"9 4 7 3",
+			args{[]int{9, 4, 7, 3}},
+			3,
 			9,
 		},
 		{
-			"2 4 6 8",
-			args{[]int{2, 4, 6, 8}},
-			2,
-			8,
+			"3 8 6 5",
+			args{[]int{3, 8, 6, 5}},
+			3,
+			6,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			gotMin, gotMax := findMinAndMax(tt.args.in)
-			if gotMin != tt.wantMin {
-				t.Errorf("findMinAndMax() gotMin = %v, want %v", gotMin, tt.wantMin)
+			got, got1 := findDividable(tt.args.in)
+			if got != tt.want {
+				t.Errorf("findDividable() got = %v, want %v", got, tt.want)
 			}
-			if gotMax != tt.wantMax {
-				t.Errorf("findMinAndMax() gotMax = %v, want %v", gotMax, tt.wantMax)
+			if got1 != tt.want1 {
+				t.Errorf("findDividable() got1 = %v, want %v", got1, tt.want1)
 			}
 		})
 	}

@@ -2,15 +2,15 @@ package matrix
 
 // Take a matrix and calculate the checksum of the matrix
 // itegrate through each row of the matrix
-// get the difference of the largest and smallest
+// find the only two numbers in each row where one evenly divides the other
 // return the total of differences
 func CalculateChecksum(matrix [][]int) int {
 	differencesByRow := make([]int, len(matrix))
 
 	// get the difference by row and push the result to differencesByRow slice
 	for i, row := range matrix {
-		min, max := findMinAndMax(row)
-		differencesByRow[i] = max - min
+		min, max := findDividable(row)
+		differencesByRow[i] = max / min
 	}
 
 	// calculate the checksum
@@ -22,16 +22,23 @@ func CalculateChecksum(matrix [][]int) int {
 	return out
 }
 
-// Take a slice of int, find the minimum and maximum numbers
-func findMinAndMax(in []int) (min int, max int) {
-	min = in[0]
-	max = in[0]
-	for _, n := range in {
-		if n < min {
-			min = n
-		}
-		if n > max {
-			max = n
+// Take a slice of int find the 2 numbers
+// that one evenly divides the other
+// the result is a whole number
+func findDividable(in []int) (min int, max int) {
+loop:
+	for i, m := range in {
+		for j, n := range in {
+			if i == j {
+				continue
+			}
+			if m%n == 0 {
+				min, max = n, m
+				break loop
+			} else if n%m == 0 {
+				min, max = m, n
+				break loop
+			}
 		}
 	}
 
